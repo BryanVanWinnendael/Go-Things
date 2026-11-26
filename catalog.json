@@ -22,14 +22,14 @@
       "identifier": "com.example.gopost",
       "exe": "go-post.exe",
       "setup": "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/go-post-setup-1.0.0-amd64.exe",
-      "preview": "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/app/gopost/resources/preview1.png",
-      "hero": "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/app/gopost/resources/preview1.png",
+      "preview": "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/app/go-post/resources/preview1.png",
+      "hero": "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/app/go-post/resources/preview1.png",
       "screenshots": [
-        "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/app/gopost/resources/preview1.png",
-        "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/app/gopost/resources/preview2.png",
-        "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/app/gopost/resources/preview3.png"
+        "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/app/go-post/resources/preview1.png",
+        "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/app/go-post/resources/preview2.png",
+        "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/app/go-post/resources/preview3.png"
       ],
-      "icon": "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/app/gopost/resources/icon.png",
+      "icon": "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/app/go-post/resources/icon.png",
       "accent": "#10b981"
     },
     {
@@ -50,12 +50,12 @@
       "identifier": "com.example.gomail",
       "exe": "go-mail.exe",
       "setup": "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/go-mail-setup-1.0.0-amd64.exe",
-      "preview": "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/app/gomail/resources/preview1.png",
-      "hero": "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/app/gomail/resources/preview1.png",
+      "preview": "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/app/go-mail/resources/preview1.png",
+      "hero": "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/app/go-mail/resources/preview1.png",
       "screenshots": [
-        "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/app/gomail/resources/preview1.png"
+        "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/app/go-mail/resources/preview1.png"
       ],
-      "icon": "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/app/gomail/resources/icon.png",
+      "icon": "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/app/go-mail/resources/icon.png",
       "accent": "#2b3b79"
     }
   ]

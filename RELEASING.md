@@ -24,26 +24,18 @@ go-mail/resources/
 
 Use the same convention for every app: `icon.png` plus numbered `previewN.png` files. `preview1.png` is the featured/hero shot; the rest appear in the SCREENS gallery.
 
-When you create a release, copy each app's `resources` folder under an `app` folder and upload the files with these exact asset names:
+`catalog.json` points straight at those repository files with raw URLs such as:
 
-```
-app/go-post/resources/icon.png
-app/go-post/resources/preview1.png
-app/go-post/resources/preview2.png
-app/go-post/resources/preview3.png
-app/gomail/resources/icon.png
-app/gomail/resources/preview1.png
-```
+`https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-post/resources/preview1.png`
 
-`catalog.json` points to those paths, so the copy must be 1:1.
+Pictures are **not** release assets. Commit them to the repository and keep the paths in `catalog.json` in sync with the `resources` folders. The URLs use the `main` branch; if your default branch is named differently, update that part of each URL.
 
 ## What to attach to a release
 
-Every release that should be "latest" must contain the full set, because Go Hub resolves asset names against that one release:
+Every release that should be "latest" must contain the full set of installers, because Go Hub resolves setup names against that one release:
 
 - `catalog.json` — copy of the file at the root of this repository.
 - One Windows setup per app, named exactly as the `setup` URL in the catalog, for example `go-post-setup-1.0.0-amd64.exe`.
-- The `app/<id>/resources/...` files listed above.
 - `go-hub-setup-1.0.0-amd64.exe` if you want people to be able to install or reinstall the hub from the same release.
 
 Build outputs stay out of Git. They are uploaded here, not committed.
@@ -59,7 +51,7 @@ Build outputs stay out of Git. They are uploaded here, not committed.
    - add or renumber `previewN.png` URLs if the pictures changed;
    - add a new object to `apps` for a new app and set `featured: true` if it should get a hero card;
    - update `updated`.
-4. Create a GitHub release and upload **all** assets listed above, including the full `app/<id>/resources/...` set.
+4. Create a GitHub release and upload **all** assets listed above. The pictures stay in the repository.
 5. Publish it as a normal release, not a draft or a pre-release. GitHub's `latest` release is what Go Hub reads.
 
 Go Hub checks the catalog on launch. `Ctrl/Cmd+R` in the hub forces another check. If GitHub cannot be reached, the hub keeps working with the built-in list and shows a Retry button; nothing is invented or downloaded in the background.
@@ -70,7 +62,7 @@ Go Hub checks the catalog on launch. `Ctrl/Cmd+R` in the hub forces another chec
 - Set `"featured": true` on each app that should appear in the large featured section at the top of the store. Apps without the flag still appear in ALL APPS. Marking more than one app shows more than one hero card.
 - `id` is lowercase letters, digits and hyphens; it must be unique.
 - `setup` must be an `https` URL to a Windows installer in the release.
-- `preview`, `hero`, `icon` and each `screenshots` entry may be omitted, but if present they must be `https` URLs to the `app/<id>/resources/...` assets.
+- `preview`, `hero`, `icon` and each `screenshots` entry may be omitted, but if present they must be `https` raw URLs to that app's `resources/` folder in this repository.
 - `accent` is optional and must look like `#10b981`.
 - `identifier` is the registry key the setup writes; `exe` is the installed program's filename. Keep both in sync with the app's `mygo.json`.
 

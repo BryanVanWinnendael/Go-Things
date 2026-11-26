@@ -14,16 +14,23 @@ const (
 	// releaseBase is the stable address of the newest published release.
 	releaseBase = repoURL + "/releases/latest/download/"
 	catalogURL  = releaseBase + "catalog.json"
+
+	// Pictures are read from the repository, not attached to a release.
+	repoBranch = "main"
+	rawBase    = "https://raw.githubusercontent.com/" + repoOwner + "/" + repoName + "/" + repoBranch + "/"
 )
 
 func releaseAsset(name string) string {
 	return releaseBase + name
 }
 
-// appAsset points at a file copied from an app's own resources/ folder into
-// the release under app/<id>/resources/<name>.
+// appAsset points at an app's own resources/ folder in the repository.
 func appAsset(id, name string) string {
-	return releaseBase + "app/" + id + "/resources/" + name
+	folder := map[string]string{"gopost": "go-post", "gomail": "go-mail"}[id]
+	if folder == "" {
+		folder = id
+	}
+	return rawBase + folder + "/resources/" + name
 }
 
 // suiteApp is one product the hub can install. The values are the facts the

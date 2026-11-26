@@ -1,0 +1,9 @@
+{
+  "name": "go-hub",
+  "identifier": "com.example.gohub",
+  "version": "1.0.0",
+  "out": "build",
+  "windows": {
+    "displayName": "Go Hub"
+  }
+}

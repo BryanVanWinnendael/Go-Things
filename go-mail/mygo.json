@@ -1,0 +1,9 @@
+{
+  "name": "go-mail",
+  "identifier": "com.example.gomail",
+  "version": "1.0.0",
+  "out": "build",
+  "windows": {
+    "displayName": "Go Mail"
+  }
+}

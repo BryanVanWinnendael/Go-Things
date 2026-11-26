@@ -1,0 +1,5 @@
+# Build outputs are attached to GitHub Releases, not committed. See RELEASING.md.
+**/build/
+**/.old-*/
+**/*.exe
+**/resources/installers/

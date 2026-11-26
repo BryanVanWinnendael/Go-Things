@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-12T00:00:00Z",
+  "title": "Design System: Go Hub",
+  "extensions": {
+    "colorMeta": {
+      "primary": { "role": "primary", "displayName": "Theme extreme", "canonical": "#ffffff", "tonalRamp": ["#000000", "#1a1a1a", "#333333", "#666666", "#999999", "#cccccc", "#e6e6e6", "#ffffff"] },
+      "success": { "role": "semantic", "displayName": "Good", "canonical": "#59d39b", "tonalRamp": ["#1a3a2a", "#2a5a3f", "#3a7a55", "#4a9a6b", "#59b882", "#59d39b", "#7de0b0", "#a3eccc"] },
+      "warning": { "role": "semantic", "displayName": "Warn", "canonical": "#f2b35d", "tonalRamp": ["#4a3314", "#6a4a1c", "#8a6124", "#aa7a2c", "#ca9334", "#e8a848", "#f2b35d", "#f7cc8a"] },
+      "danger": { "role": "semantic", "displayName": "Bad", "canonical": "#ff6b70", "tonalRamp": ["#3a1a1c", "#5a2528", "#7a3033", "#9a3b3e", "#ba4649", "#d85055", "#ff6b70", "#ff9599"] },
+      "neutral-bg": { "role": "neutral", "displayName": "Nocturne ground", "canonical": "#0b0b0b", "tonalRamp": ["#050505", "#0b0b0b", "#161616", "#1d1d1d", "#242424", "#3a3a3a", "#5a5a5a", "#8a8f9f"] },
+      "neutral-text": { "role": "neutral", "displayName": "Text", "canonical": "#f4f4f6", "tonalRamp": ["#8a8f9f", "#a0a4b2", "#b6bac6", "#cccfd9", "#dde0e7", "#e8eaf0", "#f0f1f5", "#f4f4f6"] },
+      "neutral-muted": { "role": "neutral", "displayName": "Muted", "canonical": "#8a8f9f", "tonalRamp": ["#3a3d47", "#4a4e5a", "#5a5e6b", "#6b6f7d", "#7b7f8e", "#8a8f9f", "#a0a4b2", "#b6bac6"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "App name in the hero." },
+      "headline": { "displayName": "Headline", "purpose": "App name on the details page." },
+      "title": { "displayName": "Title", "purpose": "Row and card titles." },
+      "body": { "displayName": "Body", "purpose": "Taglines, descriptions, body copy." },
+      "label": { "displayName": "Label", "purpose": "Meta lines, chips, fact rows." },
+      "micro": { "displayName": "Micro", "purpose": "Section labels, uppercase." }
+    },
+    "shadows": [
+      { "name": "preview", "value": "0 10px 24px 0 rgba(0,0,0,0.28)", "purpose": "Offset soft shadow on framed preview images." }
+    ],
+    "motion": [
+      { "name": "hover", "value": "background 0.12s ease", "purpose": "Button and row hover ground transitions." }
+    ],
+    "breakpoints": [
+      { "name": "min", "value": "1020px" },
+      { "name": "default", "value": "1180px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "White fill with dark ink on Nocturne, black fill with white ink on Daylight; the one primary action per state.",
+      "html": "<button class=\"ds-btn-primary\"><svg class=\"ds-btn-ic\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 4.2v10.4\"/><path d=\"m7.9 10.6 4.1 4.1 4.1-4.1\"/><path d=\"M5.2 19h13.6\"/></svg><span>Install Go Post</span></button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 14px; border-radius: 8px; border: none; background: #ffffff; color: #16171b; font-family: Segoe UI, system-ui, sans-serif; font-size: 12.5px; font-weight: 650; line-height: 1; cursor: pointer; transition: background 0.12s ease; } .ds-btn-primary:hover { background: #e6e6e6; } .ds-btn-primary:active { background: #cccccc; } .ds-btn-ic { width: 13px; height: 13px; }"
+    },
+    {
+      "name": "Quiet button",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "Transparent fill, one-pixel border; secondary actions and the uninstall half.",
+      "html": "<button class=\"ds-btn-quiet\"><svg class=\"ds-btn-ic\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4.6 7h14.8\"/><path d=\"M9.4 7V5.3A1.3 1.3 0 0 1 10.7 4h2.6a1.3 1.3 0 0 1 1.3 1.3V7\"/><path d=\"m6.6 7 .8 12a1.9 1.9 0 0 0 1.9 1.8h5.4a1.9 1.9 0 0 0 1.9-1.8l.8-12\"/></svg><span>Uninstall</span></button>",
+      "css": ".ds-btn-quiet { display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.075); background: transparent; color: #f4f4f6; font-family: Segoe UI, system-ui, sans-serif; font-size: 12.5px; font-weight: 600; line-height: 1; cursor: pointer; transition: background 0.12s ease; } .ds-btn-quiet:hover { background: #242424; } .ds-btn-quiet:active { background: #2a2d36; } .ds-btn-ic { width: 13px; height: 13px; }"
+    },
+    {
+      "name": "Danger button",
+      "kind": "button",
+      "refersTo": "button-danger",
+      "description": "Filled bad color; used only after an inline confirmation.",
+      "html": "<button class=\"ds-btn-danger\"><svg class=\"ds-btn-ic\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4.6 7h14.8\"/><path d=\"M9.4 7V5.3A1.3 1.3 0 0 1 10.7 4h2.6a1.3 1.3 0 0 1 1.3 1.3V7\"/><path d=\"m6.6 7 .8 12a1.9 1.9 0 0 0 1.9 1.8h5.4a1.9 1.9 0 0 0 1.9-1.8l.8-12\"/></svg><span>Remove Go Mail</span></button>",
+      "css": ".ds-btn-danger { display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 13px; border-radius: 8px; border: none; background: #ff6b70; color: #ffffff; font-family: Segoe UI, system-ui, sans-serif; font-size: 12.5px; font-weight: 650; line-height: 1; cursor: pointer; transition: background 0.12s ease; } .ds-btn-danger:hover { background: #ff8286; } .ds-btn-danger:active { background: #d95a5e; } .ds-btn-ic { width: 13px; height: 13px; }"
+    },
+    {
+      "name": "Icon button",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "30x30 square, quiet treatment, tooltip.",
+      "html": "<button class=\"ds-btn-icon\" aria-label=\"Refresh installed apps\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M19.6 12a7.6 7.6 0 1 1-2.4-5.5\"/><path d=\"M19.8 4.4v4.6h-4.6\"/></svg></button>",
+      "css": ".ds-btn-icon { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 7px; border: none; background: transparent; color: #8a8f9f; cursor: pointer; transition: background 0.12s ease, color 0.12s ease; } .ds-btn-icon:hover { background: #1d1d1d; color: #f4f4f6; } .ds-btn-icon:active { background: #242424; } .ds-btn-icon svg { width: 15px; height: 15px; }"
+    },
+    {
+      "name": "Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Panel ground pill stating one fact about an app.",
+      "html": "<span class=\"ds-chip\">Requests &amp; collections</span>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; height: 24px; padding: 0 9px; border-radius: 7px; border: 1px solid rgba(255,255,255,0.075); background: #161616; color: #8a8f9f; font-family: Segoe UI, system-ui, sans-serif; font-size: 10.5px; font-weight: 550; line-height: 1; white-space: nowrap; }"
+    },
+    {
+      "name": "State pill",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Installed / Update ready status, tinted by state color.",
+      "html": "<span class=\"ds-state-pill\"><span class=\"ds-state-dot\"></span>Installed</span>",
+      "css": ".ds-state-pill { display: inline-flex; align-items: center; gap: 5px; height: 20px; padding: 0 7px; border-radius: 6px; background: rgba(89,211,155,0.14); color: #59d39b; font-family: Segoe UI, system-ui, sans-serif; font-size: 9.5px; font-weight: 650; line-height: 1; } .ds-state-dot { width: 5px; height: 5px; border-radius: 3px; background: #59d39b; }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Field ground container with a one-pixel hairline.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-title\">Go Mail</div><div class=\"ds-card-body\">A focused IMAP and SMTP client.</div></div>",
+      "css": ".ds-card { background: #1d1d1d; border: 1px solid rgba(255,255,255,0.075); border-radius: 14px; padding: 12px 14px; } .ds-card-title { font-family: Segoe UI, system-ui, sans-serif; font-size: 14.5px; font-weight: 680; color: #f4f4f6; margin-bottom: 4px; } .ds-card-body { font-family: Segoe UI, system-ui, sans-serif; font-size: 11.5px; color: #8a8f9f; }"
+    },
+    {
+      "name": "App tile",
+      "kind": "custom",
+      "refersTo": "tile",
+      "description": "26%-radius square; theme-extreme fill (white on Nocturne, black on Daylight) with the line glyph, or the real icon read from the setup.",
+      "html": "<div class=\"ds-tile\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3.5\" y=\"3.5\" width=\"7\" height=\"7\" rx=\"2\"/><rect x=\"13.5\" y=\"3.5\" width=\"7\" height=\"7\" rx=\"2\"/><rect x=\"3.5\" y=\"13.5\" width=\"7\" height=\"7\" rx=\"2\"/><rect x=\"13.5\" y=\"13.5\" width=\"7\" height=\"7\" rx=\"2\"/></svg></div>",
+      "css": ".ds-tile { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 26%; background: #ffffff; color: #16171b; } .ds-tile svg { width: 17px; height: 17px; }"
+    },
+    {
+      "name": "Nav item",
+      "kind": "nav",
+      "refersTo": "button-quiet",
+      "description": "34px row, 9px radius, muted ink default, active on field ground.",
+      "html": "<button class=\"ds-nav-item ds-nav-item--active\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5.2 8h13.6l-1 10.9a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8Z\"/><path d=\"M9 8V6.2a3 3 0 0 1 6 0V8\"/></svg><span>Store</span></button>",
+      "css": ".ds-nav-item { display: flex; align-items: center; gap: 9px; height: 34px; padding: 0 10px; border-radius: 9px; border: none; background: transparent; color: #8a8f9f; font-family: Segoe UI, system-ui, sans-serif; font-size: 12.5px; font-weight: 600; cursor: pointer; width: 100%; } .ds-nav-item:hover { background: rgba(29,29,29,0.55); color: #f4f4f6; } .ds-nav-item--active { background: #1d1d1d; color: #f4f4f6; } .ds-nav-item svg { width: 15px; height: 15px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Suite Storefront",
+    "overview": "A storefront for a two-app suite, not a download page. The featured app owns the top of the stage with a real screen, and the suite index sits directly below. It refuses the category default of a whole page made of same-size icon cards and a wall of marketing copy. Nocturne ground, a sidebar on the ground, a stage panel at radius 18, cards at radius 12-14, theme-extreme accent (white on Nocturne, black on Daylight), Segoe UI, one-pixel white-alpha borders, offset soft shadows, a frameless window with the brand in the sidebar top and the window controls in the stage header.",
+    "keyCharacteristics": [
+      "Storefront framing: one featured app with a real capture, then the suite index.",
+      "Honest copy: no ratings, prices, download counts, or invented claims.",
+      "State-driven actions: install, open, update, uninstall — one primary per state.",
+      "Nocturne by default, Auto and Daylight selectable, persisted locally.",
+      "Every preview is a real capture of the built program."
+    ],
+    "rules": [
+      { "name": "The One Voice Rule", "body": "The primary accent appears on primary actions, the brand tile, focus rings, and selection only — never as a background wash or decorative stripe. Its rarity is the point.", "section": "colors" },
+      { "name": "The Flat-By-Default Rule", "body": "Surfaces are flat at rest. Shadows appear only on framed previews, never on buttons, cards, or rows.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use real captures for every preview; nothing is a mockup.",
+      "Do name every action by its result (\"Install Go Post\", \"Open Go Post\").",
+      "Do write status in words, not only color.",
+      "Do keep the accent rare; it carries the primary action.",
+      "Do persist the theme choice locally."
+    ],
+    "donts": [
+      "Don't invent ratings, prices, download counts, or claims.",
+      "Don't add a separate titlebar; the brand lives in the sidebar top and the controls in the stage header.",
+      "Don't ship a modal for uninstall; use the two-step inline confirm.",
+      "Don't use a second typeface; Segoe UI carries everything.",
+      "Don't put shadows on buttons, cards, or rows."
+    ]
+  }
+}

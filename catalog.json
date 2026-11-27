@@ -19,7 +19,7 @@
         "Local-first: no account, no cloud"
       ],
       "version": "1.0.0",
-      "identifier": "com.example.gopost",
+      "identifier": "com.bryanvanwinnendael.gopost",
       "exe": "go-post.exe",
       "setup": "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/go-post-setup-1.0.0-amd64.exe",
       "preview": "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-post/resources/preview1.png",
@@ -47,7 +47,7 @@
         "Local-first: no account, no cloud"
       ],
       "version": "1.0.0",
-      "identifier": "com.example.gomail",
+      "identifier": "com.bryanvanwinnendael.gomail",
       "exe": "go-mail.exe",
       "setup": "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/go-mail-setup-1.0.0-amd64.exe",
       "preview": "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-mail/resources/preview1.png",

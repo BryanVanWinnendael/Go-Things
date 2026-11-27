@@ -1,9 +1,10 @@
 {
   "name": "go-post",
-  "identifier": "com.example.gopost",
+  "identifier": "com.bryanvanwinnendael.gopost",
   "version": "1.0.0",
   "out": "build",
   "windows": {
     "displayName": "Go Post"
-  }
+  },
+  "main": "./cmd/go-post"
 }

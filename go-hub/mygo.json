@@ -2,6 +2,7 @@
   "name": "go-hub",
   "identifier": "com.example.gohub",
   "version": "1.0.0",
+  "main": "./cmd/go-hub",
   "out": "build",
   "windows": {
     "displayName": "Go Hub"

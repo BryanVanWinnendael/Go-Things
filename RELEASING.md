@@ -35,15 +35,14 @@ Pictures are **not** release assets. Commit them to the repository and keep the 
 Every release that should be "latest" must contain the full set of installers, because Go Hub resolves setup names against that one release:
 
 - `catalog.json` — copy of the file at the root of this repository.
-- One Windows setup per app, named exactly as the `setup` URL in the catalog, for example `go-post-setup-1.0.0-amd64.exe`.
+- One Windows setup per app, named exactly as the `setup` URL in the catalog, for example `go-post-setup-1.0.0-amd64.exe`. `build.ps1` leaves it in `go-post/build/windows-amd64/`.
 - `go-hub-setup-1.0.0-amd64.exe` if you want people to be able to install or reinstall the hub from the same release.
 
 Build outputs stay out of Git. They are uploaded here, not committed.
 
 ## Publish an update or a new app
 
-1. Build the changed app and its setup in that app's folder:
-   `go run github.com/egoist/mygo/cmd/mygo build -platform windows/amd64`
+1. Build all apps by running `.\build.ps1` from the repository root. It clears each old `build` folder, builds every app, and leaves the setups in `<app>/build/windows-amd64/`. Pictures stay in `resources/` and are never bundled into a setup.
 2. Put the app's pictures in `<app>/resources/` using the naming convention above.
 3. Update `catalog.json`:
    - bump the app's `version`;

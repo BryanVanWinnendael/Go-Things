@@ -1,7 +1,8 @@
 {
   "name": "go-mail",
-  "identifier": "com.example.gomail",
+  "identifier": "com.bryanvanwinnendael.gomail",
   "version": "1.0.0",
+  "main": "./cmd/go-mail",
   "out": "build",
   "windows": {
     "displayName": "Go Mail"

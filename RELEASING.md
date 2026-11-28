@@ -16,17 +16,27 @@ go-post/resources/
   preview1.png
   preview2.png
   preview3.png
+  preview-light1.png
+  preview-light2.png
+  preview-light3.png
 
 go-mail/resources/
   icon.png
   preview1.png
+  preview2.png
+  preview3.png
+  preview-light1.png
+  preview-light2.png
+  preview-light3.png
 ```
 
-Use the same convention for every app: `icon.png` plus numbered `previewN.png` files. `preview1.png` is the featured/hero shot; the rest appear in the SCREENS gallery.
+Use the same convention for every app: `icon.png` plus numbered `previewN.png` files. `preview1.png` is the featured/hero shot; the rest appear in the SCREENS gallery. A `preview-lightN.png` file is the same screen in Daylight mode; Go Hub shows it when the user picks Day (or Auto on a light desktop). Light files are optional — a catalog without them keeps using the dark pictures in both themes.
 
 `catalog.json` points straight at those repository files with raw URLs such as:
 
 `https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-post/resources/preview1.png`
+
+Each app also has `previewLight`, `heroLight` and `screenshotsLight` pointing at its `preview-lightN.png` files. Go Hub downloads both sets at once and only repaints when the theme changes.
 
 Pictures are **not** release assets. Commit them to the repository and keep the paths in `catalog.json` in sync with the `resources` folders. The URLs use the `main` branch; if your default branch is named differently, update that part of each URL.
 
@@ -55,6 +65,18 @@ Build outputs stay out of Git. They are uploaded here, not committed.
 
 Go Hub checks the catalog on launch. `Ctrl/Cmd+R` in the hub forces another check. If GitHub cannot be reached, the hub keeps working with the built-in list and shows a Retry button; nothing is invented or downloaded in the background.
 
+## Updating Go Hub itself
+
+`catalog.json` has a small `hub` object with just its `version` and `setup` URL. Go Hub is **not** in the `apps` list, so it does not appear in the store or Library like Go Post and Go Mail. When `hub.version` is newer than the running hub, the store shows an Update banner; the setup closes the running hub before replacing its files, so the update finishes after the hub reopens.
+
+To ship a hub update, bump **all three** version numbers together:
+
+1. `go-hub/mygo.json` — `version`.
+2. `go-hub/internal/catalog/catalog.go` — `Version`, used by a hub running from source.
+3. `catalog.json` — the `hub.version` and `hub.setup` URL.
+
+Then build, and upload the new `go-hub-setup-<version>-amd64.exe` and the catalog to a release, as above. A mismatch between these values makes the update either invisible or offered forever.
+
 ## Catalog rules
 
 - `schemaVersion` must be `1`.
@@ -63,6 +85,7 @@ Go Hub checks the catalog on launch. `Ctrl/Cmd+R` in the hub forces another chec
 - `setup` must be an `https` URL to a Windows installer in the release.
 - `preview`, `hero`, `icon` and each `screenshots` entry may be omitted, but if present they must be `https` raw URLs to that app's `resources/` folder in this repository.
 - `accent` is optional and must look like `#10b981`.
+- `hub` is optional and holds only `version` and an `https` `setup` URL; it is not an app in the `apps` list.
 - `identifier` is the registry key the setup writes; `exe` is the installed program's filename. Keep both in sync with the app's `mygo.json`.
 
 Installers are cached under `%LOCALAPPDATA%\go-hub\downloads`, keyed by app id and version, so a reinstall does not download the same file twice.

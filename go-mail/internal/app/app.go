@@ -155,9 +155,11 @@ type App struct {
 
 	materialOpen bool
 
-	confirmTitle string
-	confirmInfo  string
-	confirmFn    func()
+	confirmTitle  string
+	confirmInfo   string
+	confirmFn     func()
+	confirmAction string
+	confirmIcon   string
 
 	confirmClearCache bool
 }
@@ -195,6 +197,7 @@ var (
 	iconFolder      = mustIcon(`<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/>`)
 	iconRefresh     = mustIcon(`<path d="M21 12a9 9 0 1 1-2.6-6.4L21 8"/><path d="M21 3v5h-5"/>`)
 	iconPen         = mustIcon(`<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>`)
+	iconUser        = mustIcon(`<circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/>`)
 	iconImage       = mustIcon(`<rect x="3" y="3" width="18" height="18" rx="2.5"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>`)
 	iconReply       = mustIcon(`<path d="M9 17 4 12l5-5"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/>`)
 	iconEye         = mustIcon(`<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>`)
@@ -999,6 +1002,19 @@ func (a *App) sidebar(c *ui.Context) {
 					if add.Clicked() {
 						a.accountOpen = false
 						go a.startAddAccount()
+					}
+					manage := ui.ButtonBase(c.Key("manageAccounts")).FillWidth().Height(34).Padding(0, 9).Radius(7).Gap(7).Label("Manage accounts")
+					manage.Children(func() {
+						ui.Icon(c, icon("user", 13)).Size(13, 13).TextColor(t.TextMuted)
+						ui.Text(c, "Manage accounts").FontSize(11).TextColor(t.TextMuted).Grow(1)
+						ui.Icon(c, icon("chevron-right", 11)).Size(11, 11).TextColor(t.TextMuted)
+					})
+					if manage.Hovered() {
+						manage.Background(t.SurfaceHover)
+					}
+					if manage.Clicked() {
+						a.accountOpen = false
+						a.openAccounts()
 					}
 				})
 			})
@@ -2358,49 +2374,13 @@ func (a *App) windowControl(c *ui.Context, key, name, label string, danger bool)
 	return b
 }
 
+// logout signs the active account out. The account itself stays saved so it
+// can be signed back in from the setup form; the manager can remove it for good.
 func (a *App) logout() {
-	a.mu.Lock()
-	a.keepAliveGen = 0
-	if a.keepAliveStop != nil {
-		close(a.keepAliveStop)
-		a.keepAliveStop = nil
+	if a.acct.Email == "" {
+		return
 	}
-	a.mu.Unlock()
-	sess := a.sess
-	if a.active >= 0 && a.active < len(a.accounts) {
-		a.accounts = append(a.accounts[:a.active], a.accounts[a.active+1:]...)
-	}
-	if a.active >= len(a.accounts) && len(a.accounts) > 0 {
-		a.active = len(a.accounts) - 1
-	}
-	a.sess = nil
-	a.connected = false
-	a.connecting = false
-	a.switching = false
-	a.msgs = nil
-	a.folders = nil
-	a.sel = -1
-	a.viewingMsg = nil
-	a.resetSearch()
-	a.body = ""
-	a.body = ""
-	a.bodyUID = 0
-	a.showCompose = false
-	a.errMsg = ""
-	a.note = ""
-	a.form = Account{IMAPPort: "993", SMTPPort: "587"}
-	if len(a.accounts) > 0 && a.active >= 0 && a.active < len(a.accounts) {
-		a.form = a.accounts[a.active]
-	}
-	a.saveConfig()
-	a.invalidateAll()
-	if sess != nil {
-		go func() {
-			a.netMu.Lock()
-			sess.Close()
-			a.netMu.Unlock()
-		}()
-	}
+	a.logoutAccount(a.acct.Email)
 }
 
 func (a *App) folderLabel() string {

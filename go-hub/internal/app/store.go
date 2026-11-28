@@ -14,6 +14,7 @@ import (
 // the whole suite as wide capsules.
 func (a *App) storePage(c *ui.Context) {
 	ui.Column(c).FillWidth().Gap(16).Children(func() {
+		a.selfUpdateNotice(c)
 		a.storeNotice(c)
 		if len(a.apps) == 0 {
 			ui.Column(c).FillWidth().Center().Gap(8).Children(func() {
@@ -35,6 +36,34 @@ func (a *App) storePage(c *ui.Context) {
 				a.storeRow(c, app)
 			}
 		})
+	})
+}
+
+// selfUpdateNotice puts the hub's own update where it cannot be missed. The
+// catalog has an entry for Go Hub, so the version comes from the same source
+// as every other app's update.
+func (a *App) selfUpdateNotice(c *ui.Context) {
+	if !a.hubUpdateAvailable() {
+		return
+	}
+	p := a.palette
+	row := ui.Row(c).FillWidth().Height(38).Shrink(0).Padding(0, 10).Radius(9).Gap(9).AlignItems(ui.Center)
+	row.Background(p.Warn.Alpha(0.1))
+	row.Border(1, p.Warn.Alpha(0.30))
+	row.Children(func() {
+		ui.Icon(c, iconRefresh).Size(14, 14).TextColor(theme.ReadableInk(p.Warn, p)).Shrink(0)
+		ui.Text(c, fmt.Sprintf("Go Hub %s is available (you have %s).", a.hub.Version, catalog.Version)).
+			FontSize(11).TextColor(theme.ReadableInk(p.Warn, p)).Grow(1).SingleLine()
+		if a.busy[catalog.SelfID] != "" {
+			ui.Spinner(c).Size(13, 13)
+			ui.Text(c, "Updating…").FontSize(11).TextColor(theme.ReadableInk(p.Warn, p))
+			return
+		}
+		b := a.accentButton(c, "Update Go Hub", iconRefresh)
+		b.Label("Update Go Hub to " + a.hub.Version)
+		if b.Clicked() {
+			a.startSelfUpdate()
+		}
 	})
 }
 
@@ -102,11 +131,7 @@ func (a *App) hero(c *ui.Context, app catalog.App) {
 // window into what the software actually looks like.
 func (a *App) heroShot(c *ui.Context, app catalog.App) {
 	p := a.palette
-	if bmp := a.previews[app.ID+heroSuffix]; bmp != nil {
-		ui.Image(c, bmp).Fit(ui.Cover).FillWidth().FillHeight()
-		return
-	}
-	if bmp := a.previews[app.ID]; bmp != nil {
+	if bmp := a.heroBitmap(app); bmp != nil {
 		ui.Image(c, bmp).Fit(ui.Cover).FillWidth().FillHeight()
 		return
 	}
@@ -151,7 +176,7 @@ func (a *App) preview(c *ui.Context, app catalog.App, w, h, radius float32) {
 	frame := ui.Box(c).Width(w).Height(h).Shrink(0).Radius(radius).Clip().Background(p.Bg).Border(1, p.Border)
 	frame.Shadow(0, 10, 24, 0, ui.RGBA(0, 0, 0, 0.28))
 	frame.Children(func() {
-		if bmp := a.previews[app.ID]; bmp != nil {
+		if bmp := a.previewBitmap(app); bmp != nil {
 			ui.Image(c, bmp).Fit(ui.Cover).FillWidth().FillHeight()
 		} else {
 			ui.Box(c).FillWidth().FillHeight().Center().Children(func() {

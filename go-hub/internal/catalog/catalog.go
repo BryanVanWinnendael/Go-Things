@@ -1,8 +1,30 @@
 package catalog
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+	"strings"
+)
 
+// Version is the Go Hub running now. When the catalog lists a newer version
+// for itself, the store offers to update the hub.
 const Version = "1.0.0"
+
+// SelfID names Go Hub when a synthetic app is needed to download its setup.
+const SelfID = "gohub"
+
+// HubUpdate is the only information the catalog carries about Go Hub itself:
+// the version to compare with the running one, and its installer URL.
+type HubUpdate struct {
+	Version string `json:"version"`
+	Setup   string `json:"setup"`
+}
+
+// DefaultHub is used before the first catalog arrives and when GitHub cannot
+// be reached.
+func DefaultHub() HubUpdate {
+	return HubUpdate{Version: Version, Setup: ReleaseAsset("go-hub-setup-1.0.0-amd64.exe")}
+}
 
 // The store is driven by catalog.json in this project's latest GitHub
 // release. Attach a new catalog.json and the installers it names to a
@@ -51,6 +73,11 @@ type App struct {
 	Preview     string   `json:"preview"`
 	Hero        string   `json:"hero"`
 	Screenshots []string `json:"screenshots"`
+	// Light variants of the same pictures. They are optional: a catalog with
+	// only the original fields still works in both themes.
+	PreviewLight     string   `json:"previewLight,omitempty"`
+	HeroLight        string   `json:"heroLight,omitempty"`
+	ScreenshotsLight []string `json:"screenshotsLight,omitempty"`
 	// Featured puts the app in the large hero slot at the top of the store.
 	Featured bool `json:"featured"`
 	// Icon is the app's mark, shown on its tile when available.
@@ -58,6 +85,62 @@ type App struct {
 	// Accent is the app's own accent colour, used for its tile and mark in
 	// the hub instead of the hub's theme-extreme accent.
 	Accent string `json:"accent"`
+}
+
+// PreviewRef picks the preview for the active theme. The light fields are
+// optional, so an older catalog keeps its single image in both themes.
+func (a App) PreviewRef(dark bool) string {
+	if !dark && a.PreviewLight != "" {
+		return a.PreviewLight
+	}
+	return a.Preview
+}
+
+// HeroRef picks the hero image for the active theme.
+func (a App) HeroRef(dark bool) string {
+	if !dark && a.HeroLight != "" {
+		return a.HeroLight
+	}
+	return a.Hero
+}
+
+// ScreenshotRefs picks the gallery for the active theme.
+func (a App) ScreenshotRefs(dark bool) []string {
+	if !dark && len(a.ScreenshotsLight) > 0 {
+		return a.ScreenshotsLight
+	}
+	return a.Screenshots
+}
+
+// IsNewer compares two dotted version numbers, so 1.10.0 beats 1.9.0 as
+// expected. Missing or non-numeric parts count as zero.
+func IsNewer(latest, current string) bool {
+	l, c := versionParts(latest), versionParts(current)
+	for i := 0; i < len(l) || i < len(c); i++ {
+		x, y := 0, 0
+		if i < len(l) {
+			x = l[i]
+		}
+		if i < len(c) {
+			y = c[i]
+		}
+		if x != y {
+			return x > y
+		}
+	}
+	return false
+}
+
+func versionParts(v string) []int {
+	var out []int
+	for _, part := range strings.Split(strings.TrimSpace(v), ".") {
+		n, err := strconv.Atoi(strings.TrimSpace(part))
+		if err != nil {
+			n = 0
+		}
+		out = append(out, n)
+	}
+	return out
 }
 
 // Fallback keeps the store useful before the first catalog arrives,
@@ -80,15 +163,18 @@ var Fallback = []App{
 			"Import and export workspaces",
 			"Local-first: no account, no cloud",
 		},
-		Version:     "1.0.0",
-		Identifier:  "com.example.gopost",
-		ExeName:     "go-post.exe",
-		Setup:       ReleaseAsset("go-post-setup-1.0.0-amd64.exe"),
-		Preview:     AppAsset("gopost", "preview1.png"),
-		Hero:        AppAsset("gopost", "preview1.png"),
-		Icon:        AppAsset("gopost", "icon.png"),
-		Screenshots: []string{AppAsset("gopost", "preview1.png"), AppAsset("gopost", "preview2.png"), AppAsset("gopost", "preview3.png")},
-		Accent:      "#10b981",
+		Version:          "1.0.0",
+		Identifier:       "com.bryanvanwinnendael.gopost",
+		ExeName:          "go-post.exe",
+		Setup:            ReleaseAsset("go-post-setup-1.0.0-amd64.exe"),
+		Preview:          AppAsset("gopost", "preview1.png"),
+		Hero:             AppAsset("gopost", "preview1.png"),
+		Screenshots:      []string{AppAsset("gopost", "preview1.png"), AppAsset("gopost", "preview2.png"), AppAsset("gopost", "preview3.png")},
+		PreviewLight:     AppAsset("gopost", "preview-light1.png"),
+		HeroLight:        AppAsset("gopost", "preview-light1.png"),
+		ScreenshotsLight: []string{AppAsset("gopost", "preview-light1.png"), AppAsset("gopost", "preview-light2.png"), AppAsset("gopost", "preview-light3.png")},
+		Icon:             AppAsset("gopost", "icon.png"),
+		Accent:           "#10b981",
 	},
 	{
 		ID:      "gomail",
@@ -103,15 +189,18 @@ var Fallback = []App{
 			"Folders, search and attachments",
 			"Local-first: no account, no cloud",
 		},
-		Version:     "1.0.0",
-		Identifier:  "com.example.gomail",
-		ExeName:     "go-mail.exe",
-		Setup:       ReleaseAsset("go-mail-setup-1.0.0-amd64.exe"),
-		Preview:     AppAsset("gomail", "preview1.png"),
-		Hero:        AppAsset("gomail", "preview1.png"),
-		Icon:        AppAsset("gomail", "icon.png"),
-		Screenshots: []string{AppAsset("gomail", "preview1.png")},
-		Accent:      "#2b3b79",
+		Version:          "1.0.0",
+		Identifier:       "com.bryanvanwinnendael.gomail",
+		ExeName:          "go-mail.exe",
+		Setup:            ReleaseAsset("go-mail-setup-1.0.0-amd64.exe"),
+		Preview:          AppAsset("gomail", "preview1.png"),
+		Hero:             AppAsset("gomail", "preview1.png"),
+		Screenshots:      []string{AppAsset("gomail", "preview1.png"), AppAsset("gomail", "preview2.png"), AppAsset("gomail", "preview3.png")},
+		PreviewLight:     AppAsset("gomail", "preview-light1.png"),
+		HeroLight:        AppAsset("gomail", "preview-light1.png"),
+		ScreenshotsLight: []string{AppAsset("gomail", "preview-light1.png"), AppAsset("gomail", "preview-light2.png"), AppAsset("gomail", "preview-light3.png")},
+		Icon:             AppAsset("gomail", "icon.png"),
+		Accent:           "#2b3b79",
 	},
 }
 

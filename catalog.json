@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-11-26",
+  "updated": "2026-11-28",
   "apps": [
     {
       "id": "gopost",
@@ -29,6 +29,13 @@
         "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-post/resources/preview2.png",
         "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-post/resources/preview3.png"
       ],
+      "previewLight": "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-post/resources/preview-light1.png",
+      "heroLight": "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-post/resources/preview-light1.png",
+      "screenshotsLight": [
+        "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-post/resources/preview-light1.png",
+        "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-post/resources/preview-light2.png",
+        "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-post/resources/preview-light3.png"
+      ],
       "icon": "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-post/resources/icon.png",
       "accent": "#10b981"
     },
@@ -53,10 +60,23 @@
       "preview": "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-mail/resources/preview1.png",
       "hero": "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-mail/resources/preview1.png",
       "screenshots": [
-        "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-mail/resources/preview1.png"
+        "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-mail/resources/preview1.png",
+        "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-mail/resources/preview2.png",
+        "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-mail/resources/preview3.png"
+      ],
+      "previewLight": "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-mail/resources/preview-light1.png",
+      "heroLight": "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-mail/resources/preview-light1.png",
+      "screenshotsLight": [
+        "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-mail/resources/preview-light1.png",
+        "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-mail/resources/preview-light2.png",
+        "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-mail/resources/preview-light3.png"
       ],
       "icon": "https://raw.githubusercontent.com/BryanVanWinnendael/Go-Things/main/go-mail/resources/icon.png",
       "accent": "#2b3b79"
     }
-  ]
+  ],
+  "hub": {
+    "version": "1.0.0",
+    "setup": "https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/go-hub-setup-1.0.0-amd64.exe"
+  }
 }

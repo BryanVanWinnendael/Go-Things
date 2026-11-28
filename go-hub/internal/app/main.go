@@ -13,14 +13,17 @@ import (
 
 func Main() {
 	a := &App{
-		apps:     catalog.Fallback,
-		installs: map[string]install.Info{},
-		busy:     map[string]string{},
-		errors:   map[string]string{},
-		previews: map[string]*ui.Bitmap{},
-		logos:    map[string]*ui.Bitmap{},
-		shots:    map[string][]*ui.Bitmap{},
-		sizes:    map[string]string{},
+		apps:          catalog.Fallback,
+		installs:      map[string]install.Info{},
+		busy:          map[string]string{},
+		errors:        map[string]string{},
+		previews:      map[string]*ui.Bitmap{},
+		previewsLight: map[string]*ui.Bitmap{},
+		logos:         map[string]*ui.Bitmap{},
+		shots:         map[string][]*ui.Bitmap{},
+		shotsLight:    map[string][]*ui.Bitmap{},
+		sizes:         map[string]string{},
+		hub:           catalog.DefaultHub(),
 	}
 	a.themeSetting = settings.Load().Theme
 

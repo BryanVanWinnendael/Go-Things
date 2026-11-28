@@ -137,6 +137,7 @@ func (a *App) settingsWindowView(c *ui.Context) {
 					Margin(12, 8, 6, 8)
 				a.settingsRailItem(c, "appearance", "Appearance", "palette", "")
 				a.settingsRailItem(c, "mail", "Mail", "pen", "")
+				a.settingsRailItem(c, "accounts", "Accounts", "user", fmt.Sprintf("%d", len(a.accounts)))
 				a.settingsRailItem(c, "about", "About", "info", "")
 				ui.Spacer(c).Grow(1)
 				ui.Text(c, versionLabel()).FontSize(9).TextColor(p.Muted).Padding(0, 6)
@@ -162,6 +163,8 @@ func (a *App) settingsWindowView(c *ui.Context) {
 							a.settingsAbout(c)
 						} else if a.settingsTab == "mail" {
 							a.settingsMail(c)
+						} else if a.settingsTab == "accounts" {
+							a.settingsAccounts(c)
 						} else {
 							a.settingsAppearance(c)
 						}
@@ -180,6 +183,8 @@ func (a *App) settingsTitle() string {
 	switch a.settingsTab {
 	case "mail":
 		return "Mail"
+	case "accounts":
+		return "Accounts"
 	case "about":
 		return "About"
 	default:
@@ -675,14 +680,24 @@ func (a *App) closePopovers() {
 // openConfirm opens the shared confirmation popup. The action runs only when
 // the user confirms, so a destructive menu item cannot fire on a stray click.
 func (a *App) openConfirm(title, message string, fn func()) {
+	a.openConfirmAction(title, message, "Delete", "trash", fn)
+}
+
+// openConfirmAction is openConfirm with a custom button label and icon, used
+// for non-destructive confirmations such as signing out.
+func (a *App) openConfirmAction(title, message, action, ic string, fn func()) {
 	a.confirmTitle = title
 	a.confirmInfo = message
+	a.confirmAction = action
+	a.confirmIcon = ic
 	a.confirmFn = fn
 }
 
 func (a *App) closeConfirm() {
 	a.confirmTitle = ""
 	a.confirmInfo = ""
+	a.confirmAction = ""
+	a.confirmIcon = ""
 	a.confirmFn = nil
 }
 
@@ -724,7 +739,14 @@ func (a *App) confirmDialog(c *ui.Context) {
 				if a.plainButton(c, "Cancel", "").Clicked() {
 					a.closeConfirm()
 				}
-				if a.dangerButton(c, "Delete", "trash").Clicked() {
+				action, ic := a.confirmAction, a.confirmIcon
+				if action == "" {
+					action = "Delete"
+				}
+				if ic == "" {
+					ic = "trash"
+				}
+				if a.dangerButton(c, action, ic).Clicked() {
 					a.runConfirm()
 				}
 			})

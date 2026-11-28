@@ -93,6 +93,14 @@ func TestRenderPNG(t *testing.T) {
 	// Settings window (separate screen).
 	a.sel = 0
 	save("settings.png", ui.NewTester(a.settingsWindowView, 920, 760).Image())
+	a.accounts = []Account{
+		{Name: "Alex", Email: "alex@example.com", IMAPHost: "imap.example.com", Password: "secret"},
+		{Email: "sam@work.test", IMAPHost: "mail.work.test"},
+	}
+	a.active = 0
+	a.settingsTab = "accounts"
+	save("settings-accounts.png", ui.NewTester(a.settingsWindowView, 920, 760).Image())
+	a.settingsTab = "appearance"
 
 	a.dark = false
 	a.themeSettings.Theme = "daylight"

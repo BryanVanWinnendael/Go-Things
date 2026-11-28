@@ -32,6 +32,9 @@ func (a *App) loadCatalog() {
 			a.catalogUpdated = doc.Updated
 			a.lastCatalog = time.Now()
 			a.apps = doc.Apps
+			if doc.Hub.Version != "" {
+				a.hub = doc.Hub
+			}
 			if a.detailID != "" {
 				if _, ok := a.appByID(a.detailID); !ok {
 					a.goPage(pageStore)
@@ -60,8 +63,10 @@ func (a *App) loadAssets() {
 	apps := append([]catalog.App(nil), a.apps...)
 	go func() {
 		previews := map[string]*ui.Bitmap{}
+		previewsLight := map[string]*ui.Bitmap{}
 		logos := map[string]*ui.Bitmap{}
 		shots := map[string][]*ui.Bitmap{}
+		shotsLight := map[string][]*ui.Bitmap{}
 		sizes := map[string]string{}
 		cache := map[string]*ui.Bitmap{}
 		load := func(ref string) *ui.Bitmap {
@@ -85,29 +90,41 @@ func (a *App) loadAssets() {
 			cache[ref] = bmp
 			return bmp
 		}
-		for _, app := range apps {
-			if bmp := load(app.Preview); bmp != nil {
-				previews[app.ID] = bmp
+		// Both themes are loaded up front, so switching the theme only repaints
+		// the window and never has to wait for a download.
+		loadCards := func(dst map[string]*ui.Bitmap, app catalog.App, dark bool) {
+			if bmp := load(app.PreviewRef(dark)); bmp != nil {
+				dst[app.ID] = bmp
 			}
-			if bmp := load(app.Hero); bmp != nil {
-				previews[app.ID+heroSuffix] = bmp
+			if bmp := load(app.HeroRef(dark)); bmp != nil {
+				dst[app.ID+heroSuffix] = bmp
 			}
-			if _, ok := previews[app.ID+heroSuffix]; !ok {
-				if bmp := previews[app.ID]; bmp != nil {
-					previews[app.ID+heroSuffix] = bmp
+			if _, ok := dst[app.ID+heroSuffix]; !ok {
+				if bmp := dst[app.ID]; bmp != nil {
+					dst[app.ID+heroSuffix] = bmp
 				}
 			}
-			if bmp := load(app.Icon); bmp != nil {
-				logos[app.ID] = bmp
-			}
+		}
+		loadShots := func(refs []string) []*ui.Bitmap {
 			var list []*ui.Bitmap
-			for _, ref := range app.Screenshots {
+			for _, ref := range refs {
 				if bmp := load(ref); bmp != nil {
 					list = append(list, bmp)
 				}
 			}
-			if len(list) > 0 {
+			return list
+		}
+		for _, app := range apps {
+			loadCards(previews, app, true)
+			loadCards(previewsLight, app, false)
+			if bmp := load(app.Icon); bmp != nil {
+				logos[app.ID] = bmp
+			}
+			if list := loadShots(app.ScreenshotRefs(true)); len(list) > 0 {
 				shots[app.ID] = list
+			}
+			if list := loadShots(app.ScreenshotRefs(false)); len(list) > 0 {
+				shotsLight[app.ID] = list
 			}
 			sizes[app.ID] = catalog.SetupSize(app.Setup)
 		}
@@ -116,8 +133,10 @@ func (a *App) loadAssets() {
 				return
 			}
 			a.previews = previews
+			a.previewsLight = previewsLight
 			a.logos = logos
 			a.shots = shots
+			a.shotsLight = shotsLight
 			a.sizes = sizes
 			a.win.Invalidate()
 		})

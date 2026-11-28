@@ -972,6 +972,12 @@ func icon(name string, size float32) *ui.SVG {
 		return iconTrash
 	case "refresh":
 		return iconRefresh
+	case "user", "accounts":
+		return iconUser
+	case "logout":
+		return iconLogout
+	case "edit", "pen":
+		return iconPen
 	case "palette":
 		return iconPalette
 	case "settings":

@@ -74,6 +74,19 @@ func RunSetup(path string) error {
 	return nil
 }
 
+// StartSetup starts a setup without waiting for it. The NSIS setup closes the
+// running app itself before replacing its files, so a self-update has to let
+// the installer outlive this process.
+func StartSetup(path string) error {
+	cmd := hidden(exec.Command(path, "/S"))
+	cmd.Dir = filepath.Dir(path)
+	if err := cmd.Start(); err != nil {
+		return fmt.Errorf("Could not start the Go Hub update: %w", err)
+	}
+	_ = cmd.Process.Release()
+	return nil
+}
+
 // setupGuard recovers from a setup that cannot start at all.
 // install.RunUninstaller prefers the quiet uninstall string the setup registers,
 // which already carries /S, and falls back to adding it.

@@ -17,9 +17,10 @@ import (
 // Doc is the JSON file published in each GitHub release. The order of
 // Apps is meaningful: the first one is the featured app on the store page.
 type Doc struct {
-	SchemaVersion int    `json:"schemaVersion"`
-	Updated       string `json:"updated"`
-	Apps          []App  `json:"apps"`
+	SchemaVersion int       `json:"schemaVersion"`
+	Updated       string    `json:"updated"`
+	Apps          []App     `json:"apps"`
+	Hub           HubUpdate `json:"hub"`
 }
 
 var (
@@ -59,6 +60,14 @@ func Validate(doc Doc) error {
 	if len(doc.Apps) == 0 {
 		return errors.New("it contains no apps")
 	}
+	if doc.Hub.Version != "" || doc.Hub.Setup != "" {
+		if doc.Hub.Version == "" {
+			return errors.New("the hub update needs a version")
+		}
+		if !IsHTTPS(doc.Hub.Setup) {
+			return errors.New("the hub update needs an https setup URL")
+		}
+	}
 	seen := map[string]bool{}
 	for i := range doc.Apps {
 		app := &doc.Apps[i]
@@ -82,9 +91,11 @@ func Validate(doc Doc) error {
 			return fmt.Errorf("app %q needs an https setup URL", app.ID)
 		}
 		for label, ref := range map[string]string{
-			"preview": app.Preview,
-			"hero":    app.Hero,
-			"icon":    app.Icon,
+			"preview":       app.Preview,
+			"hero":          app.Hero,
+			"icon":          app.Icon,
+			"preview light": app.PreviewLight,
+			"hero light":    app.HeroLight,
 		} {
 			if ref != "" && !IsHTTPS(ref) {
 				return fmt.Errorf("app %q has a %s that is not an https URL", app.ID, label)
@@ -93,6 +104,11 @@ func Validate(doc Doc) error {
 		for _, ref := range app.Screenshots {
 			if !IsHTTPS(ref) {
 				return fmt.Errorf("app %q has a screenshot that is not an https URL", app.ID)
+			}
+		}
+		for _, ref := range app.ScreenshotsLight {
+			if !IsHTTPS(ref) {
+				return fmt.Errorf("app %q has a light screenshot that is not an https URL", app.ID)
 			}
 		}
 		if app.Accent != "" && !accentPattern.MatchString(app.Accent) {

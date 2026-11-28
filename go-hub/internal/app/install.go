@@ -134,6 +134,47 @@ func (a *App) fail(app catalog.App, err error) {
 	})
 }
 
+// hubUpdateAvailable compares the catalog's hub version with the build that
+// is running now. Go Hub is not one of the listed apps; it only has this
+// version/setup pair in the catalog.
+func (a *App) hubUpdateAvailable() bool {
+	return a.hub.Version != "" && catalog.IsNewer(a.hub.Version, catalog.Version)
+}
+
+// hubApp makes a catalog.App just for the download helper. The hub is never
+// added to the store list or the library.
+func (a *App) hubApp() catalog.App {
+	return catalog.App{ID: catalog.SelfID, Name: "Go Hub", Version: a.hub.Version, Setup: a.hub.Setup}
+}
+
+// startSelfUpdate downloads the hub's own setup and lets it run. The NSIS
+// installer closes this process before replacing the files, so there is no
+// registry poll here: the new version is visible after the hub reopens.
+func (a *App) startSelfUpdate() {
+	if a.busy[catalog.SelfID] != "" {
+		return
+	}
+	a.busy[catalog.SelfID] = "download"
+	if a.win != nil {
+		a.win.Invalidate()
+	}
+	app := a.hubApp()
+	go func() {
+		setup, err := a.fetchSetup(app)
+		if err != nil {
+			a.fail(app, fmt.Errorf("Could not download the Go Hub update: %w", err))
+			return
+		}
+		a.win.Update(func() {
+			a.busy[catalog.SelfID] = "install"
+			a.win.Invalidate()
+		})
+		if err := install.StartSetup(setup); err != nil {
+			a.fail(app, err)
+		}
+	}()
+}
+
 // waitInstalled polls the uninstall key until the app appears.
 func waitInstalled(app catalog.App, timeout time.Duration) (install.Info, bool) {
 	deadline := time.Now().Add(timeout)

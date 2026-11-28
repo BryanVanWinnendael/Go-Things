@@ -17,6 +17,8 @@ func ReadInstalled(app catalog.App) (Info, bool) { return Info{}, false }
 
 func RunSetup(path string) error { return errUnsupported }
 
+func StartSetup(path string) error { return errUnsupported }
+
 func RunUninstaller(info Info) error { return errUnsupported }
 
 func LaunchApp(app catalog.App, info Info) error { return errUnsupported }

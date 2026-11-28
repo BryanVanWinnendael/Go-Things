@@ -51,10 +51,11 @@ func (a *App) detailPage(c *ui.Context) {
 	ui.Box(c).Height(12).Shrink(0)
 
 	a.sectionLabel(c, "SCREENS", "")
-	if len(app.Screenshots) > 0 {
-		shots := a.shots[app.ID]
+	refs := app.ScreenshotRefs(a.palette.Dark)
+	if len(refs) > 0 {
+		shots := a.shotBitmaps(app)
 		ui.ScrollHorizontal(c).FillWidth().Height(184).Children(func() {
-			for i := range app.Screenshots {
+			for i := range refs {
 				frame := ui.Box(c).Width(288).Height(172).Shrink(0).Radius(10).Clip().Background(p.Bg).Border(1, p.Border)
 				frame.Shadow(0, 10, 24, 0, ui.RGBA(0, 0, 0, 0.28))
 				frame.Children(func() {

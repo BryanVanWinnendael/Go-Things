@@ -115,6 +115,7 @@ func (a *App) searchPalette(c *ui.Context) {
 						commands := []cmd{
 							{"Compose new mail", "Open the compose window", "pen", "", func() { a.startCompose() }},
 							{"Open settings", "Appearance and accounts", "settings", "", func() { a.openSettings() }},
+							{"Manage accounts", "Switch, sign out or remove accounts", "user", "", func() { a.openAccounts() }},
 							{"Switch theme", "Choose from available themes", "palette", "", func() {
 								a.searchThemeMode = true
 								a.searchQuery = ""

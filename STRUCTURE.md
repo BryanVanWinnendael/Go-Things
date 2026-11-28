@@ -1,6 +1,6 @@
 # Source layout
 
-All three apps use the same shape. `mygo.json` stays at the app root; the Go
+Every app uses the same shape. `mygo.json` stays at the app root; the Go
 entry point is named by its `"main"` field, so no Go source needs to sit next
 to the config.
 

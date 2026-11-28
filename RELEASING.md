@@ -74,6 +74,7 @@ To ship a hub update, bump **all three** version numbers together:
 1. `go-hub/mygo.json` — `version`.
 2. `go-hub/internal/catalog/catalog.go` — `Version`, used by a hub running from source.
 3. `catalog.json` — the `hub.version` and `hub.setup` URL.
+4. `README.md` — the download link points at the hub setup's asset name.
 
 Then build, and upload the new `go-hub-setup-<version>-amd64.exe` and the catalog to a release, as above. A mismatch between these values makes the update either invisible or offered forever.
 

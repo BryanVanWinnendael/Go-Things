@@ -1,6 +1,10 @@
 package app
 
-import "github.com/egoist/mygo/ui"
+import (
+	"fmt"
+
+	"github.com/egoist/mygo/ui"
+)
 
 // detailPage is the product page for one app: what it does, its real
 // screens, and the actions its state allows.
@@ -52,11 +56,19 @@ func (a *App) detailPage(c *ui.Context) {
 
 	a.sectionLabel(c, "SCREENS", "")
 	refs := app.ScreenshotRefs(a.palette.Dark)
+	shots := a.shotBitmaps(app)
 	if len(refs) > 0 {
-		shots := a.shotBitmaps(app)
 		ui.ScrollHorizontal(c).FillWidth().Height(184).Children(func() {
 			for i := range refs {
-				frame := ui.Box(c).Width(288).Height(172).Shrink(0).Radius(10).Clip().Background(p.Bg).Border(1, p.Border)
+				i := i
+				frame := ui.ButtonBase(c).Key(fmt.Sprintf("shot:%s:%d", app.ID, i)).
+					Width(288).Height(172).Shrink(0).Radius(10).Clip().Background(p.Bg).Border(1, p.Border).
+					FocusRing(true).Label(fmt.Sprintf("View screenshot %d full size", i+1))
+				// While the lightbox is open the thumbnail has no Match, so the
+				// enlarged image can morph away from it and back on close.
+				if !a.shotOpen {
+					frame.Transition(shotMorph(shotMatch{App: app.ID, Index: i}))
+				}
 				frame.Shadow(0, 10, 24, 0, ui.RGBA(0, 0, 0, 0.28))
 				frame.Children(func() {
 					if i < len(shots) && shots[i] != nil {
@@ -67,6 +79,10 @@ func (a *App) detailPage(c *ui.Context) {
 						})
 					}
 				})
+				if frame.Clicked() {
+					a.shotIndex = i
+					a.shotOpen = true
+				}
 				ui.Box(c).Width(8).Shrink(0)
 			}
 		})
@@ -107,4 +123,8 @@ func (a *App) detailPage(c *ui.Context) {
 		}
 		a.fact(c, "Setup size", size)
 	})
+
+	if a.shotOpen {
+		a.shotView(c, app, refs, shots)
+	}
 }

@@ -5,6 +5,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/egoist/mygo/ui"
@@ -143,7 +144,22 @@ func (a *App) loadAssets() {
 	}()
 }
 
-// catalog.SetupSize asks GitHub how large the installer is without downloading it.
+// setupCacheName includes the catalog revision so a new release cannot reuse
+// an installer cached under an older catalog.
+func setupCacheName(app catalog.App, updated string) string {
+	base := path.Base(catalog.URLPath(app.Setup))
+	if base == "." || base == "/" || base == "" {
+		base = app.ID + ".exe"
+	}
+	parts := []string{app.ID, catalog.CacheClean.ReplaceAllString(app.Version, "-")}
+	if rev := catalog.CacheClean.ReplaceAllString(updated, "-"); rev != "" {
+		parts = append(parts, rev)
+	}
+	parts = append(parts, base)
+	return strings.Join(parts, "-")
+}
+
+// fetchSetup downloads the catalog's installer into a local cache.
 func (a *App) fetchSetup(app catalog.App) (string, error) {
 	if !catalog.IsHTTPS(app.Setup) {
 		return "", fmt.Errorf("%s's setup is not hosted at an https URL.", app.Name)
@@ -159,14 +175,21 @@ func (a *App) fetchSetup(app catalog.App) (string, error) {
 		return "", fmt.Errorf("Could not create the download folder: %w", err)
 	}
 
-	base := path.Base(catalog.URLPath(app.Setup))
-	if base == "." || base == "/" || base == "" {
-		base = app.ID + ".exe"
-	}
-	name := app.ID + "-" + catalog.CacheClean.ReplaceAllString(app.Version, "-") + "-" + base
+	name := setupCacheName(app, a.catalogUpdated)
 	dest := filepath.Join(dir, name)
 	if catalog.SetupOK(dest) {
-		return dest, nil
+		// A catalog can name the same version and file name while the asset
+		// itself was replaced (a corrected identifier, for instance). Check
+		// the size the host reports before trusting the cached copy.
+		keep := true
+		if n, ok := catalog.SetupLength(app.Setup); ok {
+			if st, err := os.Stat(dest); err != nil || st.Size() != n {
+				keep = false
+			}
+		}
+		if keep {
+			return dest, nil
+		}
 	}
 
 	part := dest + ".part"
@@ -174,6 +197,7 @@ func (a *App) fetchSetup(app catalog.App) (string, error) {
 		_ = os.Remove(part)
 		return "", err
 	}
+	_ = os.Remove(dest)
 	if err := os.Rename(part, dest); err != nil {
 		_ = os.Remove(part)
 		return "", fmt.Errorf("Could not finish the download: %w", err)

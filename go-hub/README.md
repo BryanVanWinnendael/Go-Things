@@ -14,6 +14,7 @@ installed on this PC.
 - Detail pages with real screenshots, feature lists and install facts
 - Library of installed apps, driven by the Windows per-user uninstall keys
 - Auto / Night / Day theme switch; store pictures switch with the theme
+- Go Post and Go Mail each have their own theme editor — palettes, custom themes and window material — so their look is set inside those apps, not here
 - Background catalog check with a Retry banner when GitHub cannot be reached
 - `Ctrl+R` to refresh the catalog and installed state together
 

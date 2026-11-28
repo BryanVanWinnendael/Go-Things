@@ -50,6 +50,10 @@ type App struct {
 	shots         map[string][]*ui.Bitmap
 	shotsLight    map[string][]*ui.Bitmap
 	sizes         map[string]string
+	hubIcon       *ui.Bitmap
+
+	shotOpen  bool
+	shotIndex int
 }
 
 // view builds the window frame: the sidebar, then the stage the page sits in.
@@ -75,6 +79,7 @@ func (a *App) view(c *ui.Context) {
 
 func (a *App) goPage(p page) {
 	a.confirm = ""
+	a.shotOpen = false
 	a.page = p
 	if p != pageDetail {
 		a.detailID = ""
@@ -83,6 +88,7 @@ func (a *App) goPage(p page) {
 
 func (a *App) goDetail(id string) {
 	a.confirm = ""
+	a.shotOpen = false
 	a.detailID = id
 	a.page = pageDetail
 }

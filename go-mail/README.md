@@ -14,7 +14,7 @@ window. Everything stays on your machine.
 - Mailboxes with unread counts, drag-to-reorder, plus Flagged and Shared views
 - Search, filters, attachments, and a background message cache
 - Compose with a rich-text toolbar, signatures and signature images
-- Themes, accent colours, font size and corner radius settings
+- Customise the theme and look: Dark, Light, System and extra palettes, or your own themes with tinted window chrome, a stage colour and a gradient background; window material is per account
 - Command palette for composing, settings, accounts and themes
 
 ## Screenshots

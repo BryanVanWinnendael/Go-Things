@@ -118,25 +118,35 @@ func Validate(doc Doc) error {
 	return nil
 }
 
-// loadAssets downloads the pictures and measures the setups in the background.
+// SetupSize reports the installer size shown in the store.
 func SetupSize(ref string) string {
-	if !IsHTTPS(ref) {
+	n, ok := SetupLength(ref)
+	if !ok {
 		return ""
+	}
+	return FormatSize(n)
+}
+
+// SetupLength asks the host how large the installer is, so a cached copy can
+// be checked against the one the catalog points at now.
+func SetupLength(ref string) (int64, bool) {
+	if !IsHTTPS(ref) {
+		return 0, false
 	}
 	req, err := http.NewRequest(http.MethodHead, ref, nil)
 	if err != nil {
-		return ""
+		return 0, false
 	}
 	req.Header.Set("User-Agent", "GoHub/"+Version)
 	resp, err := headClient.Do(req)
 	if err != nil {
-		return ""
+		return 0, false
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK || resp.ContentLength <= 0 {
-		return ""
+		return 0, false
 	}
-	return FormatSize(resp.ContentLength)
+	return resp.ContentLength, true
 }
 
 // fetchSetup downloads the catalog's installer into a local cache. Go Hub

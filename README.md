@@ -10,6 +10,8 @@ machine, and can be built from this repository.
 | <img src="go-mail/resources/icon.png" width="48" alt="Go Mail icon"> **[Go Mail](go-mail/README.md)** | Read and send mail over IMAP/SMTP with several accounts and provider presets. |
 | <img src="go-hub/resources/icon.png" width="48" alt="Go Hub icon"> **[Go Hub](go-hub/README.md)** | A store for the suite: install, update and launch the apps from a release catalog. |
 
+Both Go Post and Go Mail let you customise how the app looks: pick Dark, Light, System or one of the extra palettes, or build your own theme with a tinted window chrome, a coloured workspace/stage and a soft gradient background, plus a desktop window material. Go Post keeps the look per workspace; Go Mail keeps it per account.
+
 ## Download
 
 [Download the latest Go Hub installer](https://github.com/BryanVanWinnendael/Go-Things/releases/latest/download/go-hub-setup-1.0.0-amd64.exe). The hub then installs and updates the other apps for you. See [all releases](https://github.com/BryanVanWinnendael/Go-Things/releases/latest) for earlier versions.

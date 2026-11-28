@@ -38,6 +38,7 @@ var (
 )
 
 var iconBack = mustIcon(`<path d="m15 18-6-6 6-6"/>`)
+var iconNext = mustIcon(`<path d="m9 6 6 6-6 6"/>`)
 
 // appGlyph is the outline drawn when no real icon could be read from the
 // app's setup.

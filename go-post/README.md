@@ -14,7 +14,7 @@ between environments without leaving the desk. No account, no cloud.
 - Client-certificate support and request history
 - Import/export of workspaces, including cURL commands
 - Command palette for jumping to any page or action
-- Nocturne and Daylight themes, plus custom themes
+- Customise the theme and look: Dark, Light, System and extra palettes, or your own themes with tinted window chrome, a workspace colour and a gradient background; window material is per workspace
 
 ## Screenshots
 

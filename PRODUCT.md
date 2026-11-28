@@ -28,6 +28,7 @@ Windows desktop app built with MyGo and a native UI, frameless with a custom tit
 - The suite currently has two apps: Go Post (HTTP workspace) and Go Mail (IMAP/SMTP mail client).
 - The app list, versions, setup URLs and screenshot URLs come from `catalog.json` in the latest GitHub release; see `RELEASING.md`.
 - Each app has a name, one-line description, version, preview image and https setup URL.
+- Go Post and Go Mail both include a theme editor: built-in palettes, custom themes with a tinted window chrome, a coloured workspace or stage and a gradient background, plus a window material. Go Post keeps the look per workspace; Go Mail keeps it per account.
 - Store, Library, and About are the only sections.
 - Installed state and version are read from the Windows uninstall registry; no background service.
 - Install downloads the setup to a local cache, runs it silently (`/S`), then waits for Windows to list the app. Uninstall runs silently too.

@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/egoist/mygo/ui"
+	"go-hub"
 	"go-hub/internal/catalog"
-	"go-hub/internal/theme"
 )
 
 const sidebarWidth = float32(246)
@@ -17,9 +17,7 @@ func (a *App) sidebar(c *ui.Context) {
 	p := a.palette
 	ui.Column(c).Width(sidebarWidth).Shrink(0).FillHeight().Padding(8, 8, 12, 10).Gap(4).Children(func() {
 		ui.Row(c).Height(38).Shrink(0).Padding(0, 6).Gap(9).AlignItems(ui.Center).DragWindow().Children(func() {
-			ui.Box(c).Size(26, 26).Radius(8).Background(p.Accent).Center().Shrink(0).Children(func() {
-				ui.Icon(c, iconTiles).Size(15, 15).TextColor(theme.ContrastText(p.Accent))
-			})
+			a.brandTile(c)
 			ui.Column(c).Gap(0).Children(func() {
 				ui.Text(c, "Go Hub").FontSize(13).FontWeight(750).LetterSpacing(-0.15)
 				ui.Text(c, "Go Things suite").FontSize(9).TextColor(p.Muted).LetterSpacing(0.2)
@@ -42,6 +40,27 @@ func (a *App) sidebar(c *ui.Context) {
 		a.themeToggle(c)
 	})
 }
+
+// brandTile shows Go Hub's own logo from resources/icon.png. The mark is
+// black, so it sits on a white face in both themes.
+func (a *App) brandTile(c *ui.Context) {
+	if a.hubIcon == nil {
+		if bmp, err := ui.DecodeBitmap(manifest.IconPNG()); err == nil {
+			a.hubIcon = bmp
+		}
+	}
+	tile := ui.Box(c).Size(26, 26).Radius(8).Background(ui.Hex("#ffffff")).Center().Shrink(0)
+	if a.hubIcon == nil {
+		tile.Children(func() {
+			ui.Icon(c, iconTiles).Size(15, 15).TextColor(ui.Hex("#111111"))
+		})
+		return
+	}
+	tile.Children(func() {
+		ui.Image(c, a.hubIcon).Fit(ui.Contain).Size(18, 18)
+	})
+}
+
 func (a *App) navItem(c *ui.Context, target page, ic *ui.SVG, label, meta string) {
 	p := a.palette
 	on := a.page == target
